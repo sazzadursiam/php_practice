@@ -1,12 +1,5 @@
 <?php
-if (isset($_POST['frmsubmit'])) {
-    $email = $_POST['email'];
-    $password = $_REQUEST['password'];
-
-    echo $email;
-    echo "<br>";
-    echo $password;
-}
+include 'config.php';
 ?>
 
 <!doctype html>
@@ -21,22 +14,48 @@ if (isset($_POST['frmsubmit'])) {
 
 <body>
     <div class="container">
-        <form action="" method="post">
-            <div class="mb-3">
-                <label for="exampleInputEmail1" class="form-label">Email address</label>
-                <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" name="email">
-                <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
-            </div>
-            <div class="mb-3">
-                <label for="exampleInputPassword1" class="form-label">Password</label>
-                <input type="password" class="form-control" id="exampleInputPassword1" name="password">
-            </div>
-            <div class="mb-3 form-check">
-                <input type="checkbox" class="form-check-input" id="exampleCheck1">
-                <label class="form-check-label" for="exampleCheck1">Check me out</label>
-            </div>
-            <button type="submit" class="btn btn-primary" name="frmsubmit">Submit</button>
-        </form>
+
+        <a href="add-new.php" class="btn btn-info">Add new</a>
+        <div class="row py-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php
+                    $sql = "SELECT * FROM users order by created_at DESC";
+                    $query = mysqli_query($con, $sql);
+                    $sl = 1;
+                    while ($rows = mysqli_fetch_array($query)) {
+                    ?>
+                        <tr>
+                            <th><?php echo $sl++; ?></th>
+                            <td><?php echo $rows['name']; ?></td>
+                            <td><?php echo $rows['email']; ?></td>
+                            <td><?php if ($rows['status'] == 1) {
+                                    echo '<span class="badge bg-success">Active</span>';
+                                } else {
+                                    echo '<span class="badge bg-danger">In-Active</span>';
+                                } ?></td>
+                            <td>
+                                <a href="" class="btn btn-info">view</a>
+                                <a href="" class="btn btn-warning">edit</a>
+                                <a href="" class="btn btn-danger" onclick="return confirm('Are you Sure?');">delete</a>
+                                <?php echo $rows['id']; ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+
+                </tbody>
+            </table>
+        </div>
+
     </div>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
 </body>
